@@ -95,6 +95,7 @@ def main():
     revealed = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     running = True
+    start = True
 
     #Game loop
     while running:
@@ -106,7 +107,17 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
                 break
-            
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and start:
+                mx, my = pygame.mouse.get_pos() # mouse x, y
+                x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
+                if not revealed[x, y]:
+                    while board[x, y] == -1:
+                        board = generate_board(GRID_SIZE, NUM_MINES)
+                    reveal(board, revealed, x, y) #reveal that x y
+                    start = False
+                else:
+                    reveal(board, revealed, x, y) #reveal that x y
+                    start = False
             #check for mouse click for revealing
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
