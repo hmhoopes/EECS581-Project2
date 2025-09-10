@@ -57,10 +57,15 @@ def reveal(board, revealed, x, y):
                     reveal(board, revealed, i, j)
 
 def flag(board, revealed, flagged, x, y):
-    if revealed[x, y] or flagged[x,y]:
+    if revealed[x, y]:
+        #return if cell is revealed
         return
-    #set x y to revealed
-    flagged[x, y] = True
+    if flagged[x, y]:
+        #remove flag
+        flagged[x, y] = False
+    else:
+        #set flag
+        flagged[x, y] = True
 
 def draw_board(screen, board, revealed, flagged):
     for x in range(GRID_SIZE):
@@ -132,8 +137,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
-                if not flagged[x, y] and not(revealed[x,y]):
-                    flag(board, revealed, flagged, x, y) #flag that x y
+                if not(revealed[x,y]):
+                    flag(board, revealed, flagged, x, y) #flag/unflag that x y
+
     pygame.quit()
     sys.exit()
 
