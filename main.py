@@ -43,6 +43,15 @@ def generate_board(size, num_mines):
                     board[i, j] += 1 #add when its an empty cell
     return board
 
+def restart_game():
+    """Initialize a new game state"""
+    board = generate_board(GRID_SIZE, NUM_MINES)
+    revealed = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
+    flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
+    start = True
+    game_over = False
+    return board, revealed, flagged, start, game_over
+
 def reveal(board, revealed, x, y):
     if revealed[x, y] or board[x, y] == -1:
         return
@@ -112,6 +121,11 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
                 break
+            
+            # Restart functionality (press "r" to restart game)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                board, revealed, flagged, start, game_over = restart_game()
+            
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and start:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
