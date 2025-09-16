@@ -129,7 +129,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and start:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
-                if not revealed[x, y]:
+                if not revealed[x, y] and not flagged[x,y]: # Flagged check added
                     while board[x, y] == -1:
                         board = generate_board(GRID_SIZE, NUM_MINES)
                     reveal(board, revealed, x, y) #reveal that x y
@@ -141,7 +141,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
-                if not revealed[x, y]:
+                if not revealed[x, y] and not flagged[x,y]: # Flagged check added
                     if board[x, y] == -1:
                         revealed[:, :] = True  # Reveal all on mine hit
                     else:
