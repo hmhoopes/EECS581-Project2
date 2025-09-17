@@ -272,17 +272,19 @@ def main():
                     y = (mx - MARGIN_LEFT) // CELL_SIZE
                     if 0 <= x < GRID_SIZE and 0 <= y < GRID_SIZE:
                         if start:
-                            while board[x, y] == -1:
-                                board = generate_board(GRID_SIZE, mines)
-                            reveal(board, revealed, x, y)
-                            start = False
-                        else:
-                            if board[x, y] == -1:
-                                revealed[:, :] = True
-                                status = "Loss"
-                                game_over = True
-                            else:
+                            if not flagged[x,y]:
+                                while board[x, y] == -1:
+                                    board = generate_board(GRID_SIZE, mines)
                                 reveal(board, revealed, x, y)
+                                start = False
+                        else:
+                            if not flagged[x,y]:
+                                if board[x, y] == -1:
+                                    revealed[:, :] = True
+                                    status = "Loss"
+                                    game_over = True
+                                else:
+                                    reveal(board, revealed, x, y)
 
                 # Right click
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
