@@ -6,7 +6,7 @@ import sys
 GRID_SIZE = 10
 CELL_SIZE = 40
 NUM_MINES = 10
-WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE + 60
+WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE + 100
 GAME_WIDTH = WIDTH 
 GAME_HEIGHT = WIDTH 
 
@@ -142,17 +142,29 @@ def draw_board(screen, board, revealed, flagged):
 def game_status(window, status):
     if status == 0:
         text = FONT.render("Current Status: Playing", True, (0, 0, 0))
-        window.blit(text, (10, 420))
-        pygame.display.flip()
+        window.blit(text, (10, 450))
     elif status == -1:
         text = FONT.render("Current Status: Game Over", True, (0, 0, 0))
-        window.blit(text, (10, 420))
-        pygame.display.flip()
+        window.blit(text, (10, 450))
     elif status == 1:
         text = FONT.render("Current Status: You Win!", True, (0, 0, 0))
-        window.blit(text, (10, 420))
-        pygame.display.flip()
-        
+        window.blit(text, (10, 450))
+
+def cr_labels(window):
+        y_pos = 12
+
+        for row in range(1, 11):
+            text = FONT.render(f"{row}", True, (0, 0, 0))
+            window.blit(text, (410, y_pos))
+            y_pos += 40
+
+        col = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+        x_pos = 12
+        for c in col:
+            text = FONT.render(f"{c}", True, (0, 0, 0))
+            window.blit(text, (x_pos, 410))
+            x_pos += 40
+
 def main():
     #create the screen & add caption
     window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -173,6 +185,7 @@ def main():
         screen.fill(BG_COLOR)
         draw_board(screen, board, revealed, flagged)
         game_status(window, 0)
+        cr_labels(window)
         pygame.display.flip()
 
         for event in pygame.event.get():
