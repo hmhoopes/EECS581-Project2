@@ -61,17 +61,20 @@ def generate_board(size, num_mines):
 
 def restart_game():
     """Initialize a new game state"""
+    # Generate new board with mines
     board = generate_board(GRID_SIZE, NUM_MINES)
+    # Initialize arrays for revealed and flagged cells
     revealed = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
+    # Set initial game states
     start = True
     game_over = False
     return board, revealed, flagged, start, game_over
 
 def reveal(board, revealed, x, y):
+    #set x y to revealed if not already revealed or a mine
     if revealed[x, y] or board[x, y] == -1:
         return
-    #set x y to revealed
     revealed[x, y] = True
 
     #recursively reveal if empty cell (No adjacent mines)
@@ -82,8 +85,8 @@ def reveal(board, revealed, x, y):
                     reveal(board, revealed, i, j)
 
 def flag(board, revealed, flagged, x, y):
+    #flag cell if not revealed
     if revealed[x, y]:
-        #return if cell is revealed
         return
     if flagged[x, y]:
         #remove flag
@@ -110,7 +113,7 @@ def draw_board(screen, board, revealed, flagged):
                         screen.blit(pygame.transform.scale(sprite_mine, (CELL_SIZE, CELL_SIZE)), rect)
                 # if adjacent
                 elif board[x, y] > 0:
-                    num_sprite = {
+                    num_sprite = {        # dictionary to map numbers to sprites with bomb numbers
                         1: sprite_grid1, 
                         2: sprite_grid2, 
                         3: sprite_grid3, 
@@ -120,13 +123,18 @@ def draw_board(screen, board, revealed, flagged):
                         7: sprite_grid7, 
                         8: sprite_grid8, 
                     } [board[x, y]]
+                    # Display number sprite for adjacent mines
                     screen.blit(pygame.transform.scale(num_sprite, (CELL_SIZE, CELL_SIZE)), rect)
                 else: 
+                    # Display empty revealed cell
                     screen.blit(pygame.transform.scale(sprite_clicked, (CELL_SIZE, CELL_SIZE)), rect)
             elif flagged[x,y] and not(revealed[x,y]):
+                # Display flag on unrevealed cell
                 screen.blit(pygame.transform.scale(sprite_flag, (CELL_SIZE, CELL_SIZE)), rect)
             else:
+                # Display basic unrevealed cell
                 screen.blit(pygame.transform.scale(sprite_basic, (CELL_SIZE, CELL_SIZE)), rect)
+            # Draw grid lines
             pygame.draw.rect(screen, GRID_COLOR, rect, 1)
 
 def main():
