@@ -155,7 +155,9 @@ def game_status(window, status):
         
 def main():
     #create the screen & add caption
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+    
     pygame.display.set_caption("EECS581 Project 1: Minesweeper")
 
     #Get board
