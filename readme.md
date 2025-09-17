@@ -1,7 +1,6 @@
 # EECS 581: Project 1, Minesweeper
 Group Members: Jackson Yanek, Manu Redd, Riley England, Evans Chigweshe, Cole Cooper
 
-
 ## Install dependencies
 
 ### Optional
