@@ -6,7 +6,9 @@ import sys
 GRID_SIZE = 10
 CELL_SIZE = 40
 NUM_MINES = 10
-WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE
+WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE + 60
+GAME_WIDTH = WIDTH 
+GAME_HEIGHT = WIDTH 
 
 # Colors
 BG_COLOR = (200, 200, 200)
@@ -137,6 +139,20 @@ def draw_board(screen, board, revealed, flagged):
             # Draw grid lines
             pygame.draw.rect(screen, GRID_COLOR, rect, 1)
 
+def game_status(window, status):
+    if status == 0:
+        text = FONT.render("Current Status: Playing", True, (0, 0, 0))
+        window.blit(text, (10, 420))
+        pygame.display.flip()
+    elif status == -1:
+        text = FONT.render("Current Status: Game Over", True, (0, 0, 0))
+        window.blit(text, (10, 420))
+        pygame.display.flip()
+    elif status == 1:
+        text = FONT.render("Current Status: You Win!", True, (0, 0, 0))
+        window.blit(text, (10, 420))
+        pygame.display.flip()
+        
 def main():
     #create the screen & add caption
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -151,8 +167,10 @@ def main():
 
     #Game loop
     while running:
+        window.fill(BG_COLOR)
         screen.fill(BG_COLOR)
         draw_board(screen, board, revealed, flagged)
+        game_status(window, 0)
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -182,6 +200,7 @@ def main():
                 if not revealed[x, y] and not flagged[x,y]: # Flagged check added
                     if board[x, y] == -1:
                         revealed[:, :] = True  # Reveal all on mine hit
+                        game_status(window, -1)
                     else:
                         reveal(board, revealed, x, y) #reveal that x y
             
