@@ -7,7 +7,7 @@ Group Members: Jackson Yanek, Manu Redd, Riley England, Evans Chigweshe, Cole Co
 ### Optional
 Create a Virtual Environment prior to installing dependencies.
 
-Install PyGame, Numpy, Etc.
+### Install PyGame, Numpy, Etc.
 `pip install -r requirements.txt`
 
 ## Run the game
