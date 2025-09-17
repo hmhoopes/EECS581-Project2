@@ -20,6 +20,22 @@ FLAG_COLOR = (255, 0, 0)
 pygame.init()
 FONT = pygame.font.SysFont(None, 32)
 
+# Load sprites
+sprite_clicked = pygame.image.load("sprites/clicked.png")
+sprite_flag = pygame.image.load("sprites/flag.png")
+sprite_basic = pygame.image.load("sprites/basic.png")
+sprite_grid1 = pygame.image.load("sprites/grid_1.png")
+sprite_grid2 = pygame.image.load("sprites/grid_2.png")
+sprite_grid3 = pygame.image.load("sprites/grid_3.png")
+sprite_grid4 = pygame.image.load("sprites/grid_4.png")
+sprite_grid5 = pygame.image.load("sprites/grid_5.png")
+sprite_grid6 = pygame.image.load("sprites/grid_6.png")
+sprite_grid7 = pygame.image.load("sprites/grid_7.png")
+sprite_grid8 = pygame.image.load("sprites/grid_8.png")
+sprite_grid7 = pygame.image.load("sprites/grid_7.png")
+sprite_mine = pygame.image.load("sprites/bomb.png")
+sprite_mineClicked = pygame.image.load("sprites/bomb_clicked.png")
+
 #Generate board
 def generate_board(size, num_mines):
     #start with 0 grid (occupancy grid for mines)
@@ -83,20 +99,34 @@ def draw_board(screen, board, revealed, flagged):
             rect = pygame.Rect(y*CELL_SIZE, x*CELL_SIZE, CELL_SIZE, CELL_SIZE)
             if revealed[x, y]:
                 #reveal the cell
-                pygame.draw.rect(screen, REVEALED_COLOR, rect)
+                screen.blit(pygame.transform.scale(sprite_clicked, (CELL_SIZE, CELL_SIZE)), rect)
                 
                 #if mine
                 if board[x, y] == -1:
-                    pygame.draw.circle(screen, MINE_COLOR, rect.center, CELL_SIZE//3)
-                
+                    # different if clicked mine
+                    if np.any(revealed & (board == -1)) and revealed[x, y]:
+                        screen.blit(pygame.transform.scale(sprite_mineClicked, (CELL_SIZE, CELL_SIZE)), rect)
+                    else:
+                        screen.blit(pygame.transform.scale(sprite_mine, (CELL_SIZE, CELL_SIZE)), rect)
                 # if adjacent
                 elif board[x, y] > 0:
-                    text = FONT.render(str(board[x, y]), True, TEXT_COLOR)
-                    screen.blit(text, text.get_rect(center=rect.center))
+                    num_sprite = {
+                        1: sprite_grid1, 
+                        2: sprite_grid2, 
+                        3: sprite_grid3, 
+                        4: sprite_grid4, 
+                        5: sprite_grid5, 
+                        6: sprite_grid6, 
+                        7: sprite_grid7, 
+                        8: sprite_grid8, 
+                    } [board[x, y]]
+                    screen.blit(pygame.transform.scale(num_sprite, (CELL_SIZE, CELL_SIZE)), rect)
+                else: 
+                    screen.blit(pygame.transform.scale(sprite_clicked, (CELL_SIZE, CELL_SIZE)), rect)
             elif flagged[x,y] and not(revealed[x,y]):
-                pygame.draw.circle(screen, FLAG_COLOR, rect.center, CELL_SIZE//3)
+                screen.blit(pygame.transform.scale(sprite_flag, (CELL_SIZE, CELL_SIZE)), rect)
             else:
-                pygame.draw.rect(screen, BG_COLOR, rect)
+                screen.blit(pygame.transform.scale(sprite_basic, (CELL_SIZE, CELL_SIZE)), rect)
             pygame.draw.rect(screen, GRID_COLOR, rect, 1)
 
 def main():
