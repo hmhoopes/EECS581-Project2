@@ -5,13 +5,14 @@ import sys
 # Game settings
 GRID_SIZE = 10
 CELL_SIZE = 40
-NUM_MINES = 10
-WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE + 100
+NUM_MINES = int(input("Enter Number of Mines: "))
+    
+WIDTH = HEIGHT = GRID_SIZE * CELL_SIZE + 150
 GAME_WIDTH = WIDTH 
 GAME_HEIGHT = WIDTH 
 
 # Colors
-BG_COLOR = (200, 200, 200)
+BG_COLOR = (247, 247, 247)
 GRID_COLOR = (100, 100, 100)
 REVEALED_COLOR = (220, 220, 220)
 MINE_COLOR = (20, 20, 20)
@@ -38,6 +39,11 @@ sprite_grid7 = pygame.image.load("sprites/grid_7.png")
 sprite_mine = pygame.image.load("sprites/bomb.png")
 sprite_mineClicked = pygame.image.load("sprites/bomb_clicked.png")
 
+# check for correct mine number
+while NUM_MINES not in range(10, 21):
+    print("Please Enter a Value within the range of 10 - 20")
+    NUM_MINES = int(input("Enter Number of Mines: "))
+    
 #Generate board
 def generate_board(size, num_mines):
     #start with 0 grid (occupancy grid for mines)
@@ -86,16 +92,23 @@ def reveal(board, revealed, x, y):
                 if not revealed[i, j]:
                     reveal(board, revealed, i, j)
 
-def flag(board, revealed, flagged, x, y):
+def flag(board, revealed, flagged, x, y, flag_count):
     #flag cell if not revealed
     if revealed[x, y]:
         return
     if flagged[x, y]:
         #remove flag
         flagged[x, y] = False
+        flag_count += 1 # Increase on remove
     else:
         #set flag
         flagged[x, y] = True
+        flag_count -= 1 # Decrease on place
+    # Bug fix
+    if flag_count <= -1:
+        flag_count = 0
+        
+    return flag_count
 
 def draw_board(screen, board, revealed, flagged):
     for x in range(GRID_SIZE):
@@ -139,35 +152,63 @@ def draw_board(screen, board, revealed, flagged):
             # Draw grid lines
             pygame.draw.rect(screen, GRID_COLOR, rect, 1)
 
-def game_status(window, status):
-    if status == 0:
-        text = FONT.render("Current Status: Playing", True, (0, 0, 0))
-        window.blit(text, (10, 450))
-    elif status == -1:
-        text = FONT.render("Current Status: Game Over", True, (0, 0, 0))
-        window.blit(text, (10, 450))
-    elif status == 1:
-        text = FONT.render("Current Status: You Win!", True, (0, 0, 0))
-        window.blit(text, (10, 450))
+def game_status(screen, element, flag_count, code):
+    if element == 'all':
+        
+        if code == 0:
+            text = FONT.render("Playing", True, (0, 0, 0))
+        elif code == -1:
+            text = FONT.render("Game Over: Loss", True, (0, 0, 0))
+        elif code == 1: 
+            text = FONT.render("Victory!", True, (0, 0, 0))
+        screen.blit(text, (10, 500)) # for playing
 
-def cr_labels(window):
+        text = FONT.render(f"Flags Remaining: {flag_count}", True, (0, 0, 0))
+        text2 = FONT.render(f"Mines Remaining: {flag_count}", True, (0, 0, 0))
+        screen.blit(text, (275, 450))
+        screen.blit(text2, (10, 450))
+        
+# Could be helpful for combining, if not delete
+'''
+    # Codes -1, 0, and 1 are Status Updates
+    if element == 'status':
+        if code == 0:
+            text = FONT.render("Playing", True, (0, 0, 0))
+        elif code == -1:
+            text = FONT.render("Game Over: Loss", True, (0, 0, 0))
+        elif code == 1: 
+            text = FONT.render("Victory!", True, (0, 0, 0))
+        screen.blit(text, (10, 500)) # for playing
+
+    # Code 2 is flag / mine remaining update
+    if element == 'flag':
+            text = FONT.render(f"Flags Remaining: {flag_count}", True, (0, 0, 0))
+            text2 = FONT.render(f"Mines Remaining: {flag_count}", True, (0, 0, 0))
+            screen.blit(text, (275, 450))
+            screen.blit(text2, (10, 450))
+'''
+
+def cr_labels(screen):
         y_pos = 12
 
         for row in range(1, 11):
             text = FONT.render(f"{row}", True, (0, 0, 0))
-            window.blit(text, (410, y_pos))
+            screen.blit(text, (410, y_pos))
             y_pos += 40
 
         col = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
         x_pos = 12
         for c in col:
             text = FONT.render(f"{c}", True, (0, 0, 0))
-            window.blit(text, (x_pos, 410))
+            screen.blit(text, (x_pos, 410))
             x_pos += 40
 
+def has_won(board, revealed):
+    # Win if every non-mine cell is revealed
+    return np.all((board == -1) | revealed)
+    
 def main():
     #create the screen & add caption
-    window = pygame.display.set_mode((WIDTH, HEIGHT))
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
     
     pygame.display.set_caption("EECS581 Project 1: Minesweeper")
@@ -178,14 +219,15 @@ def main():
     flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     running = True
     start = True
+    flag_count = NUM_MINES
+    status_code = 0
 
     #Game loop
     while running:
-        window.fill(BG_COLOR)
         screen.fill(BG_COLOR)
         draw_board(screen, board, revealed, flagged)
-        game_status(window, 0)
-        cr_labels(window)
+        game_status(screen, 'all', flag_count, status_code)
+        cr_labels(screen)
         pygame.display.flip()
 
         for event in pygame.event.get():
@@ -208,23 +250,26 @@ def main():
                 else:
                     reveal(board, revealed, x, y) #reveal that x y
                     start = False
+                    
             #check for mouse click for revealing
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
                 if not revealed[x, y] and not flagged[x,y]: # Flagged check added
                     if board[x, y] == -1:
+                        status_code = -1
                         revealed[:, :] = True  # Reveal all on mine hit
-                        game_status(window, -1)
                     else:
                         reveal(board, revealed, x, y) #reveal that x y
+                        if has_won(board, revealed):
+                            status_code = 1
             
             #flag
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 mx, my = pygame.mouse.get_pos() # mouse x, y
                 x, y = my // CELL_SIZE, mx // CELL_SIZE #get cell from mouse position
                 if not(revealed[x,y]):
-                    flag(board, revealed, flagged, x, y) #flag/unflag that x y
+                    flag_count = flag(board, revealed, flagged, x, y, flag_count) #flag/unflag that x y
 
     pygame.quit()
     sys.exit()
