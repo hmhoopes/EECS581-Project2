@@ -10,4 +10,4 @@ Create a Virtual Environment prior to installing dependencies.
 `pip install -r requirements.txt`
 
 ## Run the game
-`python3 main.py`
+`python3 product_2.py`
