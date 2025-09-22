@@ -142,11 +142,15 @@ def load_sprites():
 # ---------- Game Logic ----------
 def generate_board(size, num_mines):
     # Generate board array and place mines with adjacent counts
-    board = np.zeros((size, size), dtype=int)
-    mines = np.random.choice(size * size, num_mines, replace=False)
+    board = np.zeros((size, size), dtype=int) # start with 0 grid (occupancy grid for mines)
+    mines = np.random.choice(size * size, num_mines, replace=False) #random indices for mines
+    
+    #iterate through mines and place a mine in each index
     for idx in mines:
-        x, y = divmod(idx, size)
+        x, y = divmod(idx, size)   # get x y from just index. basically division with a remainder
         board[x, y] = -1  # Place mine
+
+        #adjacent mine counter
         for i in range(max(0, x - 1), min(size, x + 2)):
             for j in range(max(0, y - 1), min(size, y + 2)):
                 if board[i, j] != -1:
@@ -155,7 +159,11 @@ def generate_board(size, num_mines):
 
 def restart_game(num_mines):
     # Initialize a new game state
+
+    # Generate new board with mines
     board = generate_board(GRID_SIZE, num_mines)
+    
+    # Initialize arrays for revealed and flagged cells
     revealed = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     start = True  # Indicates first click
@@ -164,9 +172,11 @@ def restart_game(num_mines):
 
 def reveal(board, revealed, x, y):
     # Reveal a cell recursively if it is empty
-    if revealed[x, y] or board[x, y] == -1:
+    if revealed[x, y] or board[x, y] == -1:  # set x y to revealed if not already revealed or a mine
         return
     revealed[x, y] = True
+
+    # recursively reveal if empty cell (No adjacent mines)
     if board[x, y] == 0:
         for i in range(max(0, x - 1), min(GRID_SIZE, x + 2)):
             for j in range(max(0, y - 1), min(GRID_SIZE, y + 2)):
@@ -205,6 +215,7 @@ def draw_board(surface, board, revealed, flagged, sprites, fonts, status_text, n
 
     for x in range(GRID_SIZE):
         for y in range(GRID_SIZE):
+            # grid rectangles
             rect = pygame.Rect(MARGIN_LEFT + y * CELL_SIZE, MARGIN_TOP + x * CELL_SIZE, CELL_SIZE, CELL_SIZE)
             if revealed[x, y]:
                 # Reveal cell
@@ -349,3 +360,4 @@ def main():
     sys.exit()
 
 main()
+
