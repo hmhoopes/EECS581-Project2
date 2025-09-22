@@ -228,7 +228,7 @@ def generate_board(size, num_mines):
     board = np.zeros((size, size), dtype=int)
     mines = np.random.choice(size * size, num_mines, replace=False)
     for idx in mines:
-        x, y = divmod(idx, size)
+        x, y = divmod(idx, size)   # get x y from just index. basically division with a remainder
         board[x, y] = -1  # Place mine
         # Increment adjacent mine counts
         for i in range(max(0, x - 1), min(size, x + 2)):
@@ -247,6 +247,8 @@ def restart_game(num_mines):
         tuple: (board, revealed, flagged, start, game_over)
     """
     board = generate_board(GRID_SIZE, num_mines)
+    
+    # Initialize arrays for revealed and flagged cells
     revealed = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     flagged = np.zeros((GRID_SIZE, GRID_SIZE), dtype=bool)
     start = True  # Indicates first click
@@ -265,6 +267,8 @@ def reveal(board, revealed, x, y):
     if revealed[x, y] or board[x, y] == -1:
         return
     revealed[x, y] = True
+
+    # recursively reveal if empty cell (No adjacent mines)
     if board[x, y] == 0:
         # Recursively reveal adjacent empty cells
         for i in range(max(0, x - 1), min(GRID_SIZE, x + 2)):
@@ -334,6 +338,7 @@ def draw_board(surface, board, revealed, flagged, sprites, fonts, status_text, n
     # Draw each cell
     for x in range(GRID_SIZE):
         for y in range(GRID_SIZE):
+            # grid rectangles
             rect = pygame.Rect(MARGIN_LEFT + y * CELL_SIZE, MARGIN_TOP + x * CELL_SIZE, CELL_SIZE, CELL_SIZE)
             if revealed[x, y]:
                 # Reveal cell
@@ -483,3 +488,4 @@ def main():
 
 # Run the game
 main()
+
