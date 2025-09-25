@@ -32,7 +32,7 @@ def reveal(board, revealed, x, y):
     Args:
         board: Board array
         revealed: Revealed state array
-        x, y: Cell coordinates
+        x, y: Cell coordinates (not actual mouse coordinates)
     """
     if revealed[x, y] or board[x, y] == -1:
         return
@@ -54,7 +54,7 @@ def flag(board, revealed, flagged, x, y):
         board: Board array
         revealed: Revealed state array
         flagged: Flagged state array
-        x, y: Cell coordinates
+        x, y: Cell coordinates (not actual mouse coordinates)
     """
     if revealed[x, y]:
         return

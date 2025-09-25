@@ -2,6 +2,8 @@ import pygame
 from constants import *
 from enum import Enum
 import numpy as np
+import random
+from board_functions import reveal
 
 class Difficulty(Enum):
     EASY = "easy"
@@ -31,16 +33,28 @@ class AIEngine:
 
         match self.difficulty:
             case Difficulty.EASY:
-                self._make_easy_move(board, revealed)
+                return self._make_easy_move(board, revealed)
 
             case Difficulty.MEDIUM:
-                self._make_medium_move(board, revealed)
+                return self._make_medium_move(board, revealed)
 
             case Difficulty.HARD:
-                self._make_hard_move(board)
+                return self._make_hard_move(board)
 
     def _make_easy_move(self, board: np.ndarray, revealed: np.ndarray):
-        ...
+        # get indices where revealed==false, those are squares ai can choose
+        unrevealed_indices = np.where(revealed == False)
+        row_indices, col_indices = unrevealed_indices # unpack to get indiv row and col indices
+        # zip row and col indices together to get list of coord pairs of unrevealed squares
+        unrevealed_coords = list(zip(row_indices, col_indices))
+        # make random choice for which square to reveal
+        ai_coord_choice = random.choice(unrevealed_coords)
+        x, y = ai_coord_choice
+        # return ai's x and y cell choice
+        return x, y
+
+
+
 
     def _make_medium_move(self, board: np.ndarray, revealed: np.ndarray):
         ...
