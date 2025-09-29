@@ -123,6 +123,7 @@ def main():
                 running = False
             # Restart with R key
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                play_music(START_MUSIC_1)
                 mines, difficulty, mode = initialize_game(screen, clock, fonts)
                 ai.set_difficulty(difficulty)
                 pygame.event.clear()
