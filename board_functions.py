@@ -51,6 +51,7 @@ def reveal(board, revealed, x, y):
     """
     if revealed[x, y] or board[x, y] == -1:
         sound_mine_reveal.play()
+        sound_mine_reveal.set_volume(0.2)
         return
     revealed[x, y] = True
     sound_cell_reveal.play()
