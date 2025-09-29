@@ -1,6 +1,8 @@
 import numpy as np
 from constants import *
 import pygame
+from pygame.locals import * #for sound
+from pygame import mixer #for sound
 from utility_functions import *
 
 
@@ -25,6 +27,13 @@ def generate_board(size, num_mines):
                     # Add to adjacent cell's mine count
                     board[i, j] += 1
     return board
+
+def play_music(music_file, volume = 0.1):
+    loop = True
+    mixer.music.pause()
+    mixer.music.load(music_file)
+    mixer.music.set_volume(volume)
+    mixer.music.play(-1 if loop else 0)
 
 def reveal(board, revealed, x, y):
     """

@@ -31,6 +31,9 @@ def main():
     pygame.display.set_caption("EECS581 Project 1:Minesweeper")
     clock = pygame.time.Clock()
 
+    # Sound
+    play_music(START_MUSIC_1) #loads in start menu music
+
     # Initialize fonts
     small = pygame.font.Font(FONT_NAME, 22)
     big = pygame.font.Font(FONT_NAME, 36)
@@ -93,6 +96,8 @@ def main():
             ai_x, ai_y = ai.make_move(board=board, revealed=revealed)
             # copied from their code, just checks if x, y is mine or not and then acts accordingly
             if board[ai_x, ai_y] == -1:
+                play_music(LOSE_MUSIC) #loads in lose music
+
                 # Hit a mine -> game over
                 revealed[:, :] = True
                 status = "Game Over"
@@ -109,6 +114,8 @@ def main():
 
                 # Restart / Quit buttons
                 if restart_btn.is_clicked(event):
+                    play_music(START_MUSIC_1)
+                    
                     mines = ask_mine_count(screen, clock, fonts)
                     pygame.event.clear()
                     mines = clamp_mines(mines)
@@ -146,6 +153,8 @@ def main():
                                     start = False
                                 else:
                                     if board[x, y] == -1:
+                                        play_music(LOSE_MUSIC) #loads in lose music
+
                                         # Hit a mine -> game over
                                         revealed[:, :] = True
                                         status = "Game Over"
@@ -159,6 +168,9 @@ def main():
 
         # Check for victory
         if not game_over and np.all(revealed | (board == -1)):
+
+            play_music(WIN_MUSIC) #loads in win music
+
             # All non-mine cells revealed: player wins
             status = "Victory"
             game_over = True
