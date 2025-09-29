@@ -13,11 +13,11 @@ FPS = 60  # Frames per second
 # Sound files
 # converted mp3 to ogg since pygame has a harder time loading mp3
 ############################################################
-START_MUSIC_1 = 'sounds\ssbm_opening_theme.ogg'
-START_MUSIC_2 = 'sounds\kirby_adventure_nes.ogg'
-START_MUSIC_3 = 'sounds\c418_minecraft.ogg'
-LOSE_MUSIC = 'sounds\womp_womp_womp.ogg'
-WIN_MUSIC = 'sounds\yoshi_happy_song.ogg'
+START_MUSIC_1 = 'sounds/ssbm_opening_theme.ogg'         # temp patch to allow running on linux
+START_MUSIC_2 = 'sounds/kirby_adventure_nes.ogg'        # temp patch to allow running on linux
+START_MUSIC_3 = 'sounds/c418_minecraft.ogg'             # temp patch to allow running on linux
+LOSE_MUSIC = 'sounds/womp_womp_womp.ogg'                # temp patch to allow running on linux
+WIN_MUSIC = 'sounds/yoshi_happy_song.ogg'               # temp patch to allow running on linux
 
 # Colors
 ############################################################
