@@ -18,27 +18,65 @@ def clamp_mines(n: int) -> int:
     # Use max/min to ensure mine count stays in bounds
     return max(10, min(20, n))
 
-
-def ask_mine_count(screen, clock, fonts):
+def initialize_game(screen, clock, fonts):
     """
-    Allow user to choose mine count before starting game using a slider UI.
+    Allow user to choose mine count and AI mode before starting game using a slider UI.
     Args:
         screen: Pygame display surface
         clock: Pygame clock
         fonts: Font dictionary
     Returns:
         int: Selected mine count
+        AIDifficulty: selected AIDifficulty
+        AIMode: selected AIMode
     """
-    slider = Slider(WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT // 2, 300, 10, 20, 10, fonts['big'])
-    confirm_btn = Button((WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 + 80, 160, 50), "Confirm", fonts['big'])
+    difficulty = AIDifficulty.Easy
+    mode = AIMode.Off
+
+    slider = Slider(WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT // 2 - 150, 300, 10, 20, 10, fonts['big'])
+    confirm_btn = Button((WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 100, 160, 50), "Confirm", fonts['big'])
+    
+    ai_easy_btn = Button((WINDOW_WIDTH // 4 - 120, WINDOW_HEIGHT // 2, 160, 50), "Easy", fonts['big'])
+    ai_medium_btn = Button((WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2, 160, 50), "Medium", fonts['big'])
+    ai_hard_btn = Button(((WINDOW_WIDTH * 3) // 4 - 40, WINDOW_HEIGHT // 2, 160, 50), "Hard", fonts['big'])
+
+    ai_off_btn = Button((WINDOW_WIDTH // 4 - 120, WINDOW_HEIGHT // 2 + 100, 160, 50), "Off", fonts['big'])
+    ai_alternate_btn = Button((WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 + 100, 160, 50), "Alternate", fonts['big'])
+    ai_solve_btn = Button(((WINDOW_WIDTH * 3) // 4 - 40, WINDOW_HEIGHT // 2 + 100, 160, 50), "Solve", fonts['big'])
 
     while True:
         screen.fill(LIGHT_GRAY)
         title = fonts['big'].render("Choose Mine Count", True, BLUE)
         screen.blit(title, (WINDOW_WIDTH // 2 - title.get_width() // 2, 120))
 
+        ai_diff_text = "Off"
+        match (difficulty):
+            case AIDifficulty.Easy:
+                ai_diff_text = "Easy"         
+            case AIDifficulty.Medium:
+                ai_diff_text = "Medium"
+            case AIDifficulty.Hard:
+                ai_diff_text = "Hard"
+        ai_mode_text = "Alternate"
+        match (mode):
+            case AIMode.Off:
+                ai_diff_text += " (will not run currently)"
+                ai_mode_text = "Off"
+            case AIMode.Solver:
+                ai_mode_text = "Solve"
+        ai_diff = fonts['big'].render("AI Difficulty: " + ai_diff_text, True, BLUE)
+        ai_mode = fonts['big'].render("AI Mode: " + ai_mode_text, True, BLUE)
+        screen.blit(ai_diff, (WINDOW_WIDTH // 2 - ai_diff.get_width() // 2, WINDOW_HEIGHT // 2 - 30))
+        screen.blit(ai_mode, (WINDOW_WIDTH // 2 - ai_mode.get_width() // 2, WINDOW_HEIGHT // 2 + 70))
+
         slider.draw(screen)
         confirm_btn.draw(screen)
+        ai_easy_btn.draw(screen)
+        ai_medium_btn.draw(screen)
+        ai_hard_btn.draw(screen)
+        ai_off_btn.draw(screen)
+        ai_alternate_btn.draw(screen)
+        ai_solve_btn.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -47,7 +85,19 @@ def ask_mine_count(screen, clock, fonts):
             slider.handle_event(event)
             if confirm_btn.is_clicked(event):
                 # Return the selected mine count when confirmed
-                return slider.value
+                return slider.value, difficulty, mode
+            if ai_easy_btn.is_clicked(event):
+                difficulty = AIDifficulty.Easy
+            if ai_medium_btn.is_clicked(event):
+                difficulty = AIDifficulty.Medium
+            if ai_hard_btn.is_clicked(event):
+                difficulty = AIDifficulty.Hard
+            if ai_off_btn.is_clicked(event):
+                mode = AIMode.Off
+            if ai_alternate_btn.is_clicked(event):
+                mode = AIMode.Alternate                
+            if ai_solve_btn.is_clicked(event):
+                mode = AIMode.Solver
 
         pygame.display.flip()
         clock.tick(FPS)

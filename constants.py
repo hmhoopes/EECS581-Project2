@@ -1,3 +1,4 @@
+from enum import Enum
 ############################################################
 # Configuration Constants
 ############################################################
@@ -8,6 +9,19 @@ MARGIN_TOP = 60  # Top margin for board
 WINDOW_PADDING = 20  # Padding around window
 FONT_NAME = None  # Default font
 FPS = 60  # Frames per second
+
+############################################################
+# AI Modes
+############################################################
+class AIDifficulty(Enum):
+    Easy = 1
+    Medium = 2
+    Hard = 3
+
+class AIMode(Enum):
+    Off = 1
+    Alternate = 2
+    Solver = 3
 
 ############################################################
 # Sound files

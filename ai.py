@@ -5,19 +5,17 @@ import numpy as np
 import random
 from board_functions import reveal
 
-class Difficulty(Enum):
-    EASY = "easy"
-    MEDIUM = "medium"
-    HARD = "hard"
-
 class AIEngine:
-    def __init__(self, difficulty: Difficulty):
+    def __init__(self, difficulty: AIDifficulty):
         """
         AIEngine class to store methods and attributes 
         Args:
-            difficulty (Difficulty): difficulty mode of ai, either Difficulty.EASY, Difficulty.MEDIUM, or Difficulty.HARD
+            difficulty (AIDifficulty): difficulty mode of ai, either AIDifficulty.Easy, AIDifficulty.Medium, or AIDifficulty.Hard
         """
-        self.difficulty: Difficulty = difficulty
+        self.difficulty: AIDifficulty = difficulty
+    
+    def set_difficulty(self, difficulty: AIDifficulty):
+        self.difficulty = difficulty
     
     def make_move(self, board: np.ndarray, revealed: np.ndarray):
         """
@@ -30,15 +28,14 @@ class AIEngine:
             revealed (np.ndarray): An array of bools that represents squares on the board that have been revealed.
                                     Their implementation is a square is True if revealed or False if not.
         """
-
         match self.difficulty:
-            case Difficulty.EASY:
+            case AIDifficulty.Easy:
                 return self._make_easy_move(board, revealed)
 
-            case Difficulty.MEDIUM:
+            case AIDifficulty.Medium:
                 return self._make_medium_move(board, revealed)
 
-            case Difficulty.HARD:
+            case AIDifficulty.Hard:
                 return self._make_hard_move(board)
 
     def _make_easy_move(self, board: np.ndarray, revealed: np.ndarray):
