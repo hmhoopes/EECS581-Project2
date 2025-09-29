@@ -5,6 +5,12 @@ from pygame.locals import * #for sound
 from pygame import mixer #for sound
 from utility_functions import *
 
+mixer.init()
+
+sound_mine_reveal = pygame.mixer.Sound(SOUND_MINE_REVEAL)
+sound_flag_place = pygame.mixer.Sound(SOUND_FLAG_PLACE)
+sound_flag_remove = pygame.mixer.Sound(SOUND_FLAG_REMOVE)
+sound_cell_reveal = pygame.mixer.Sound(SOUND_CELL_REVEAL)
 
 def generate_board(size, num_mines):
     """
@@ -44,9 +50,10 @@ def reveal(board, revealed, x, y):
         x, y: Cell coordinates (not actual mouse coordinates)
     """
     if revealed[x, y] or board[x, y] == -1:
+        sound_mine_reveal.play()
         return
     revealed[x, y] = True
-
+    sound_cell_reveal.play()
     # recursively reveal if empty cell (No adjacent mines)
     if board[x, y] == 0:
         # Recursively reveal adjacent empty cells
@@ -69,6 +76,10 @@ def flag(board, revealed, flagged, x, y):
         return
     # Toggle flag state for this cell
     flagged[x, y] = not flagged[x, y]
+    if flagged[x, y]:
+        sound_flag_place.play()
+    else:
+        sound_flag_remove.play()
 
 def draw_board(surface, board, revealed, flagged, sprites, fonts, status_text, num_mines, flag_count, restart_btn, quit_btn):
     """

@@ -1,5 +1,8 @@
 import pygame
+#from effects import EffectManager
 from constants import *
+pygame.init()
+button_click_sound = pygame.mixer.Sound(SOUND_BUTTON_CLICK)
 
 # ---------- Button Helper ----------
 ############################################################
@@ -37,5 +40,6 @@ class Button:
         """Return True if button is clicked."""
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
+                button_click_sound.play()
                 return True
         return False

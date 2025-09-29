@@ -33,6 +33,17 @@ START_MUSIC_3 = 'sounds/c418_minecraft.ogg'             # temp patch to allow ru
 LOSE_MUSIC = 'sounds/womp_womp_womp.ogg'                # temp patch to allow running on linux
 WIN_MUSIC = 'sounds/yoshi_happy_song.ogg'               # temp patch to allow running on linux
 
+############################################################
+#sound effects
+#converted mp3 to wav so it would work with pygame
+############################################################
+SOUND_MINE_REVEAL = 'sounds/explosion.wav'              # temp patch to
+SOUND_FLAG_PLACE = 'sounds/flag_place.wav'              # temp patch to allow running on linux
+SOUND_FLAG_REMOVE = 'sounds/flag_remove.wav'            # temp patch to allow running
+SOUND_CELL_REVEAL = 'sounds/reveal.wav'                 # temp patch to allow running on linux
+SOUND_BUTTON_CLICK = 'sounds/button-click.wav'          # temp patch to allow running on
+
+
 # Colors
 ############################################################
 # Color Definitions
