@@ -27,6 +27,10 @@ def main():
     Main entry point for Minesweeper game. Handles initialization, menu, game loop, and user input.
     """
     pygame.init()
+    try:
+        pygame.mixer.init()  # Initialize mixer for sound
+    except pygame.error:
+        print("Warning: Sound disabled due to audio device error.")
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("EECS581 Project 1:Minesweeper")
     clock = pygame.time.Clock()
