@@ -119,7 +119,7 @@ def main():
         flag_count = np.sum(flagged)
         # if it is AI's turn, ai make move. else check for player events
         if (mode == AIMode.Solver or (mode == AIMode.Alternate and turn % 2 != 0)) and not game_over:
-            sleep(.25) # sleep for a bit just so ai doesnt go immediately after player
+            sleep(1) # sleep for a bit just so ai doesnt go immediately after player
             # get ai's move
             ai_x, ai_y = ai.make_move(board=board, revealed=revealed)
             # copied from their code, just checks if x, y is mine or not and then acts accordingly
