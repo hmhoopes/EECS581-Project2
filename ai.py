@@ -54,7 +54,61 @@ class AIEngine:
 
 
     def _make_medium_move(self, board: np.ndarray, revealed: np.ndarray):
-        ...
+        safe_move = self._find_safe_move(board, revealed)
+        if safe_move:
+            return safe_move
+
+        unrevealed_indices = np.where(revealed == False)
+        unrevealed_coords = list(zip(*unrevealed_indices))
+        x, y = random.choice(unrevealed_coords)
+        return x, y
+
+    def _find_safe_move(self, board: np.ndarray, revealed: np.ndarray):
+        size = board.shape[0]
+
+        low_probability = float('inf')
+        low_probability_indicie = None
+
+        for x in range(size):
+            for y in range(size):
+                if revealed[x, y]:
+                    continue
+
+                max_probability = 0
+
+                for i in range(max(0, x - 1), min(size, x + 2)):
+                    for j in range(max(0, y - 1), min(size, y + 2)):
+                        if not revealed[i, j] or board[i, j] <= 0:
+                            continue
+
+                        unrevealed_count = 0
+                        for ii in range(max(0, i - 1), min(size, i + 2)):
+                            for jj in range(max(0, j - 1), min(size, j + 2)):
+                                if not revealed[ii, jj]:
+                                    unrevealed_count += 1
+
+                        if unrevealed_count > 0:
+                            probability = board[i, j] / unrevealed_count
+                            max_probability = max(max_probability, probability)
+
+                if max_probability == 0:
+                    return (x, y)
+
+                if max_probability > 0 and max_probability < low_probability:
+                    low_probability = max_probability
+                    low_probability_indicie = (x, y)
+
+        return low_probability_indicie
 
     def _make_hard_move(self, board: np.ndarray, revealed: np.ndarray):
-        ...
+        unrevealed_indices = np.where(revealed == False)
+        unrevealed_coords = list(zip(*unrevealed_indices))
+
+        safe_coords = [(x, y) for x, y in unrevealed_coords if board[x, y] != -1]
+
+        if safe_coords:
+            x, y = random.choice(safe_coords)
+            return x, y
+
+        x, y = random.choice(unrevealed_coords)
+        return x, y
