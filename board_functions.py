@@ -10,7 +10,7 @@ mixer.init()
 sound_mine_reveal = pygame.mixer.Sound(SOUND_MINE_REVEAL)
 sound_flag_place = pygame.mixer.Sound(SOUND_FLAG_PLACE)
 sound_flag_remove = pygame.mixer.Sound(SOUND_FLAG_REMOVE)
-sound_cell_reveal = pygame.mixer.Sound(SOUND_CELL_REVEAL)
+sound_cell_reveal = pygame.mixer.Sound(SOUND_BUTTON_CLICK)
 
 def generate_board(size, num_mines):
     """
