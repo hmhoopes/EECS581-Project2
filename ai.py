@@ -36,7 +36,7 @@ class AIEngine:
                 return self._make_medium_move(board, revealed)
 
             case AIDifficulty.Hard:
-                return self._make_hard_move(board)
+                return self._make_hard_move(board, revealed)
 
     def _make_easy_move(self, board: np.ndarray, revealed: np.ndarray):
         # get indices where revealed==false, those are squares ai can choose
