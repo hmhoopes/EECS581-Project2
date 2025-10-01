@@ -109,6 +109,8 @@ def load_sprites():
         dict: Sprite surfaces keyed by name
     """
     sprites = {}
+    sprites['you_loose'] = pygame.image.load("sprites/you_loose.png")
+    sprites['you_win'] = pygame.image.load("sprites/you_win.png")
     sprites['clicked'] = pygame.image.load("sprites/clicked.png")
     sprites['flag'] = pygame.image.load("sprites/flag.png")
     sprites['basic'] = pygame.image.load("sprites/basic.png")
