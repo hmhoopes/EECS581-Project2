@@ -30,7 +30,7 @@ class AIMode(Enum):
 START_MUSIC_1 = 'sounds/ssbm_opening_theme.ogg'         # temp patch to allow running on linux
 START_MUSIC_2 = 'sounds/kirby_adventure_nes.ogg'        # temp patch to allow running on linux
 START_MUSIC_3 = 'sounds/c418_minecraft.ogg'             # temp patch to allow running on linux
-LOSE_MUSIC = 'sounds/womp_womp_womp.ogg'                # temp patch to allow running on linux
+LOSE_MUSIC = 'sounds/explosion.wav'                # temp patch to allow running on linux
 WIN_MUSIC = 'sounds/yoshi_happy_song.ogg'               # temp patch to allow running on linux
 
 ############################################################
