@@ -1,3 +1,26 @@
+"""
+Minesweeper Board Related Functions
+
+Module Name: board_functions.py
+Description: Stores functions related to the game board and board management.
+             
+
+Inputs/Output: 
+    - Many to different functions:
+        - generate_board(size, num_mines) -> board
+        - play_music(music_file, volume) -> None, plays music
+        - reveal(board, revealed, x, y) -> None, updates reveal array
+        - flag(board, revealed, flagged, x, y) -> None, updates flagged array
+        - draw_board(surface, board, revealed, flagged, sprites, fonts, status_text, num_mines, flag_count, restart_btn, quit_btn) -> None, draws board
+        - restart_game(num_mines) -> board, revealed, flagged, start, game_over
+
+External Sources: 
+    - Pygame library
+    - Numpy
+
+Author: Team 8 & Team 17
+Creation Date: 9/24/2025
+"""
 import numpy as np
 from constants import *
 import pygame

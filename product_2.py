@@ -10,6 +10,36 @@ Creation Date: September 3rd-21st, 2025
 External Sources: Generative AI, Pygame documentation, NumPy documentation
 Originality: Original with the aid of generative AI
 """
+# ^ Team 8 prologue comment
+"""
+Minesweeper Main Entry Point
+
+Module Name: product_2.py
+Description:
+    Initializes the Pygame environment and is the main entry point for the Minesweeper application.
+    Sets up the game window, initializes button and other UI components, creates the game Board object,
+    runs the menu loop, initializes AI, runs main game loop, handles events and user input.
+
+Inputs:
+    - User events from Pygame (mouse clicks, quit event)
+    - Board state (mines, flags, revealed spaces, win/lose condition)
+    - Revealed cells
+
+Outputs:
+    - Rendered Minesweeper window showing the appropriate screen:
+        * Menu Screens
+        * Active game screen
+        * Win screen
+        * Lose screen
+
+External Sources:
+    - pygame: Graphics and event system
+    - numpy: board state management
+
+Author: Team 8 & Team 17
+Creation Date(Date Team 17 forked this repo): 9/22/25
+"""
+# ^ team 17 prologue comment
 
 import pygame  # Pygame for graphics and UI
 import numpy as np  # NumPy for board state management

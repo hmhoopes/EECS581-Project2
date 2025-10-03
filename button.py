@@ -1,3 +1,24 @@
+"""
+Minesweeper Button Module
+
+Module Name: button.py
+Description: Defines Button class for Minesweeper UI. Includes functions for
+             drawing and checking if clicked.
+
+Inputs:
+    - Button definitions with associated rect, text, font, color, hover_color, and text_color
+    - User click positions checked against button hitboxes
+
+Outputs:
+    - Button class that provides attributes for rendering and interaction
+
+External Sources:
+    - Pygame library for images, rects, and collision detection
+
+Author: Team 8 & Team 17
+Creation Date: 9/24/2025
+"""
+
 import pygame
 #from effects import EffectManager
 from constants import *

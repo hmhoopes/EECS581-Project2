@@ -1,3 +1,23 @@
+"""
+Minesweeper Constants Module
+
+Module Name: constants.py
+Description: Stores all global values used in implementation of MineSweeper
+
+Inputs:
+    - N/A
+
+Outputs:
+    - N/A
+
+External Sources:
+    - Pygame library for rendering and animation
+    - sounds from sounds/ directory
+
+Author: Team 8 & Team 17
+Creation Date: 9/24/2025
+"""
+
 from enum import Enum
 ############################################################
 # Configuration Constants

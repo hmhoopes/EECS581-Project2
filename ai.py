@@ -1,3 +1,26 @@
+
+"""
+Minesweeper AI Module
+
+Module Name: ai.py
+Description:
+    Contains AIEngine class that handles AI state and AI making moves. 
+
+Inputs:
+    - AI difficulty
+    - board, revealed arrays(when making a move)
+
+Outputs:
+    - AIEngine Class
+    - Coords of move to make if calling make_move
+
+External Sources:
+    - Pygame Library
+    - numpy: board state management
+
+Author: Team 8 & Team 17
+Creation Date: 9/24/25
+"""
 import pygame
 from constants import *
 from enum import Enum

@@ -1,3 +1,23 @@
+"""
+Minesweeper Slider Module
+
+Module Name: slider.py
+Description: Defines Slider class for Minesweeper UI. Includes functions for
+             drawing and handling sliding event.
+
+Inputs:
+    - Slider x, y, width, min_val, max_val, start_val, and font
+    - User click positions checked against slider hitbox
+
+Outputs:
+    - Slider class that provides attributes for rendering and interaction
+
+External Sources:
+    - Pygame library for rendering and handling user events
+
+Author: Team 8
+Creation Date: 9/24/2025
+"""
 import pygame
 from constants import *
 

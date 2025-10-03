@@ -1,3 +1,24 @@
+"""
+Minesweeper Utility Functions
+
+Module Name: utility_functions.py
+Description: Stores miscellaneous functions
+             
+
+Inputs/Output: 
+    - Many to different functions:
+       - clamp_mines(n: int) -> int
+       - initialize_game(screen, clock, fonts) -> None, initializes buttons and checks for user to click buttons
+       - load_sprites() -> sprites, returns dictionary of sprites
+       - draw_labels(surface, fonts) -> None, Draw column letters (A-J) and row numbers (1-10) on the board
+
+External Sources: 
+    - Pygame library
+    - Sprites from sprites/
+
+Author: Team 8 & Team 17
+Creation Date: 9/24/2025
+"""
 import pygame
 from constants import *
 from button import Button
