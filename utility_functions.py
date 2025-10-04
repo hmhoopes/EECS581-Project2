@@ -130,11 +130,13 @@ def load_sprites():
         dict: Sprite surfaces keyed by name
     """
     sprites = {}
-    sprites['you_loose'] = pygame.image.load("sprites/you_loose.png")
-    sprites['you_win'] = pygame.image.load("sprites/you_win.png")
+    sprites['you_lose'] = pygame.image.load("sprites/you_lose_normal.png")
+    sprites['you_win'] = pygame.image.load("sprites/you_win_normal.png")
     sprites['clicked'] = pygame.image.load("sprites/clicked.png")
     sprites['flag'] = pygame.image.load("sprites/flag.png")
     sprites['basic'] = pygame.image.load("sprites/basic.png")
+    sprites['you_lose_human'] = pygame.image.load("sprites/you_human_lose.png")
+    sprites['you_win_human'] = pygame.image.load("sprites/you_human_win.png")
     # Load numbered grid sprites
     for i in range(1, 9):
         sprites[f'grid{i}'] = pygame.image.load(f"sprites/grid_{i}.png")

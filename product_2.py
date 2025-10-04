@@ -51,7 +51,7 @@ from board_functions import *
 from ai import AIEngine
 from time import sleep
 
-def display_end_screen(screen, sprites, win: bool):
+def display_end_screen(screen, sprites, win: bool, mode: str):
     """
     Display a 'You Win' or 'You Lose' screen for two seconds before showing the end board.
 
@@ -59,10 +59,12 @@ def display_end_screen(screen, sprites, win: bool):
         screen: Pygame display surface
         sprites (dict): Dictionary of loaded sprites
         win (bool): True if the player won, False if lost
+        mod(str): "normal", "human" or "ai"
     """
     screen.fill(LIGHT_GRAY)
-    key = 'you_win' if win else 'you_loose'
-    filename = "sprites/you_win.png" if win else "sprites/you_loose.png"
+    key = f"you_{'win' if win else 'lose'}_{mode}"
+    filename = f"sprites/{key}.png"
+
     img = sprites.get(key)
     if img is None:
         img = pygame.image.load(filename)
@@ -155,7 +157,7 @@ def main():
             # copied from their code, just checks if x, y is mine or not and then acts accordingly
             if board[ai_x, ai_y] == -1:
                 play_music(WIN_MUSIC) #loads in win music
-                display_end_screen(screen, sprites, win=True)
+                display_end_screen(screen, sprites, win=True, mode='ai')
                 # Hit a mine -> game over
                 revealed[:, :] = True
                 status = "Victory"
@@ -209,8 +211,11 @@ def main():
                             else:
                                 if board[x, y] == -1:
                                     play_music(LOSE_MUSIC) #loads in lose music
-                                    display_end_screen(screen, sprites, win=False)
+                                    if mode == AIMode.Off:
+                                        display_end_screen(screen, sprites, win=False, mode='normal')
                                     # Hit a mine -> game over
+                                    else:
+                                        display_end_screen(screen, sprites, win=False, mode='human')
                                     revealed[:, :] = True
                                     status = "Game Over"
                                     game_over = True
@@ -222,11 +227,23 @@ def main():
                                 flag(board, revealed, flagged, x, y)
         # Check for victory
         if not game_over and np.all(revealed | (board == -1)):
-            if (mode == AIMode.Solver or (mode == AIMode.Alternate and turn % 2 == 0)):
-                # Human cleared the board → YOU WIN
-                play_music(WIN_MUSIC)
-                display_end_screen(screen, sprites, win=True)
-                status = "Victory"
+            if not game_over and np.all(revealed | (board == -1)):
+                if mode == AIMode.Off:
+                    # Normal play victory
+                    play_music(WIN_MUSIC)
+                    display_end_screen(screen, sprites, win=True, mode="normal")
+                    status = "Victory"
+                elif (mode == AIMode.Solver or (mode == AIMode.Alternate and turn % 2 == 0)):
+                    # Human cleared board in AI mode
+                    play_music(WIN_MUSIC)
+                    display_end_screen(screen, sprites, win=True, mode="human")
+                    status = "Victory"
+                else:
+                    # AI cleared the board
+                    play_music(LOSE_MUSIC)
+                    display_end_screen(screen, sprites, win=False, mode="ai")
+                    status = "Game Over"
+                game_over = True
             else:
                 # AI cleared the board → YOU LOSE
                 play_music(LOSE_MUSIC)
