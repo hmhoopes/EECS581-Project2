@@ -229,8 +229,10 @@ def main():
                                     status = "Game Over"
                                     game_over = True
                                     #last_click_by_ai = False
-                                else:
+                                elif (not revealed[x, y]):
                                     reveal(board, revealed, x, y)
+                                else: 
+                                    turn -=1
                             turn += 1 # update turn number
                         elif event.button == 3:  # Right-click to flag
                             if not revealed[x, y]:
