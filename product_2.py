@@ -165,7 +165,7 @@ def main():
             if board[ai_x, ai_y] == -1:
                 # AI clicked a bomb — AI loses
                 play_music(LOSE_MUSIC)
-                display_end_screen(screen, sprites, win=False, mode='ai')
+                display_end_screen(screen, sprites, win=False, mode='ai') #shows that ai lost in ai mode
                 revealed[:, :] = True
                 game_over = True
                 #last_click_by_ai = True
@@ -222,11 +222,11 @@ def main():
                                 if board[x, y] == -1: #clicks on bomb lose condition 
                                     if mode == AIMode.Off:
                                         play_music(LOSE_MUSIC) #loads in lose music
-                                        display_end_screen(screen, sprites, win=False, mode='normal')
+                                        display_end_screen(screen, sprites, win=False, mode='normal') #shows that human lost no ai
                                     # Hit a mine -> game over
                                     else:
                                         play_music(LOSE_MUSIC) 
-                                        display_end_screen(screen, sprites, win=False, mode='human')
+                                        display_end_screen(screen, sprites, win=False, mode='human') #sets end screen to show that human lost in ai mode
                                     revealed[:, :] = True
                                     status = "Game Over"
                                     game_over = True
@@ -244,17 +244,17 @@ def main():
             if mode == AIMode.Off:
                 # Normal play victory
                 play_music(WIN_MUSIC)
-                display_end_screen(screen, sprites, win=True, mode="normal")
+                display_end_screen(screen, sprites, win=True, mode="normal") #shows that human wins no AI mode
                 status = "Victory"
-            elif (mode == AIMode.Solver or mode == AIMode.Alternate and turn % 2 == 0):
+            elif (mode == AIMode.Solver or mode == AIMode.Alternate and turn % 2 == 0): 
                 # AI just played and cleared board
                 play_music(WIN_MUSIC)
-                display_end_screen(screen, sprites, win=True, mode="ai")
+                display_end_screen(screen, sprites, win=True, mode="ai") #sets ending screen to show that AI wins
                 status = "Victory"
             else:
                 # Human cleared board
                 play_music(WIN_MUSIC)
-                display_end_screen(screen, sprites, win=True, mode="human")
+                display_end_screen(screen, sprites, win=True, mode="human") #sets end screen to show that human wins
                 status = "Victory"
             game_over = True
 
