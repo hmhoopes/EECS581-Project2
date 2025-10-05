@@ -185,6 +185,7 @@ def main():
                 pygame.event.clear()
                 mines = clamp_mines(mines)
                 board, revealed, flagged, start, game_over = restart_game(mines)
+                turn = 0
                 status = "Playing"
                 ignore_next_click = True
             if quit_btn.is_clicked(event):
@@ -197,6 +198,7 @@ def main():
                 pygame.event.clear()
                 mines = clamp_mines(mines)
                 board, revealed, flagged, start, game_over = restart_game(mines)
+                turn = 0
                 status = "Playing"
                 ignore_next_click = True
             # Game input
