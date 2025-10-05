@@ -137,6 +137,8 @@ def load_sprites():
     sprites['basic'] = pygame.image.load("sprites/basic.png")
     sprites['you_lose_human'] = pygame.image.load("sprites/you_human_lose.png")
     sprites['you_win_human'] = pygame.image.load("sprites/you_human_win.png")
+    #sprites['you_lose_ai'] = pygame.image.load("sprites/you_ai_lose.png")
+    #sprites['you_win_ai'] = pygame.image.load("sprites/you_ai_win.png")
     # Load numbered grid sprites
     for i in range(1, 9):
         sprites[f'grid{i}'] = pygame.image.load(f"sprites/grid_{i}.png")

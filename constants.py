@@ -29,6 +29,8 @@ MARGIN_TOP = 60  # Top margin for board
 WINDOW_PADDING = 20  # Padding around window
 FONT_NAME = None  # Default font
 FPS = 60  # Frames per second
+is_muted = False
+
 
 ############################################################
 # AI Modes

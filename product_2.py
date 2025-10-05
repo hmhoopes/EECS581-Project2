@@ -105,6 +105,8 @@ def main():
     # Main menu buttons
     play_button = Button((WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 - 60, 200, 50), "Play Game", big)
     quit_button = Button((WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 + 10, 200, 50), "Quit", big)
+    mute_btn = Button((WINDOW_WIDTH - 110, 10, 100, 40), "Mute", small)
+    last_click_by_ai = False #tracks if human or AI clicked last
 
     # Show menu loop
     in_menu = True
@@ -114,10 +116,15 @@ def main():
         screen.blit(title_text, (WINDOW_WIDTH // 2 - title_text.get_width() // 2, 100))
         play_button.draw(screen)
         quit_button.draw(screen)
+        mute_btn.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if mute_btn.is_clicked(event):
+                global is_muted
+                is_muted = not is_muted
+                play_music(START_MUSIC_1, mute = is_muted)
             if play_button.is_clicked(event):
                 in_menu = False
             if quit_button.is_clicked(event):
@@ -156,12 +163,13 @@ def main():
             ai_x, ai_y = ai.make_move(board=board, revealed=revealed)
             # copied from their code, just checks if x, y is mine or not and then acts accordingly
             if board[ai_x, ai_y] == -1:
-                play_music(WIN_MUSIC) #loads in win music
-                display_end_screen(screen, sprites, win=True, mode='ai')
-                # Hit a mine -> game over
+                # AI clicked a bomb — AI loses
+                play_music(LOSE_MUSIC)
+                display_end_screen(screen, sprites, win=False, mode='ai')
                 revealed[:, :] = True
-                status = "Victory"
                 game_over = True
+                last_click_by_ai = True
+                status = "Game Over"
             else:
                 reveal(board, revealed, ai_x, ai_y)
             turn += 1 # update turn number
@@ -171,7 +179,7 @@ def main():
                 running = False
             # Restart / Quit buttons
             if restart_btn.is_clicked(event):
-                play_music(START_MUSIC_1)
+                play_music(START_MUSIC_1, mute = is_muted)
                 mines, difficulty, mode = initialize_game(screen, clock, fonts)
                 ai.set_difficulty(difficulty)
                 pygame.event.clear()
@@ -209,16 +217,22 @@ def main():
                                 reveal(board, revealed, x, y)
                                 start = False
                             else:
-                                if board[x, y] == -1:
-                                    play_music(LOSE_MUSIC) #loads in lose music
+                                if board[x, y] == -1: #clicks on bomb lose condition 
                                     if mode == AIMode.Off:
+                                        play_music(LOSE_MUSIC) #loads in lose music
                                         display_end_screen(screen, sprites, win=False, mode='normal')
                                     # Hit a mine -> game over
                                     else:
-                                        display_end_screen(screen, sprites, win=False, mode='human')
+                                        if last_click_by_ai == False: #checks if last click was ai
+                                            play_music(LOSE_MUSIC)
+                                            display_end_screen(screen, sprites, win=False, mode='human') #since its human and a bomb they lose
+                                        else:
+                                            play_music(WIN_MUSIC) 
+                                            display_end_screen(screen, sprites, win=True, mode='ai')
                                     revealed[:, :] = True
                                     status = "Game Over"
                                     game_over = True
+                                    last_click_by_ai = False
                                 else:
                                     reveal(board, revealed, x, y)
                             turn += 1 # update turn number
@@ -227,29 +241,28 @@ def main():
                                 flag(board, revealed, flagged, x, y)
         # Check for victory
         if not game_over and np.all(revealed | (board == -1)):
-            if not game_over and np.all(revealed | (board == -1)):
-                if mode == AIMode.Off:
-                    # Normal play victory
-                    play_music(WIN_MUSIC)
-                    display_end_screen(screen, sprites, win=True, mode="normal")
-                    status = "Victory"
-                elif (mode == AIMode.Solver or (mode == AIMode.Alternate and turn % 2 == 0)):
+            if mode == AIMode.Off:
+                # Normal play victory
+                play_music(WIN_MUSIC)
+                display_end_screen(screen, sprites, win=True, mode="normal")
+                status = "Victory"
+            elif (mode == AIMode.Solver): #or (mode == AIMode.Alternate and turn % 2 == 0) took out of zeidans condition 
                     # Human cleared board in AI mode
                     play_music(WIN_MUSIC)
-                    display_end_screen(screen, sprites, win=True, mode="human")
+                    display_end_screen(screen, sprites, win=True, mode="ai")
                     status = "Victory"
-                else:
-                    # AI cleared the board
-                    play_music(LOSE_MUSIC)
-                    display_end_screen(screen, sprites, win=False, mode="ai")
-                    status = "Game Over"
-                game_over = True
-            else:
-                # AI cleared the board → YOU LOSE
+            elif last_click_by_ai == True:
+                # AI cleared the board
                 play_music(LOSE_MUSIC)
-                display_end_screen(screen, sprites, win=False)
+                display_end_screen(screen, sprites, win=False, mode="ai")
                 status = "Game Over"
+            else:
+                # Huamn cleared in ai mode
+                play_music(WIN_MUSIC)
+                display_end_screen(screen, sprites, win=True, mode="human")
+                status = "Victory"
             game_over = True
+
         draw_board(screen, board, revealed, flagged, sprites, fonts, status, mines, flag_count, restart_btn, quit_btn)
         pygame.display.flip()
         clock.tick(FPS)
@@ -259,4 +272,3 @@ def main():
 
 # Run the game
 main()
-
