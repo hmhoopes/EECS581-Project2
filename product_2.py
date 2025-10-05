@@ -248,6 +248,7 @@ def main():
                 # AI just played and cleared board
                 play_music(WIN_MUSIC)
                 display_end_screen(screen, sprites, win=True, mode="ai")
+                status = "Victory"
             else:
                 # Human cleared board
                 play_music(WIN_MUSIC)
