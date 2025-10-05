@@ -106,7 +106,7 @@ def main():
     play_button = Button((WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 - 60, 200, 50), "Play Game", big)
     quit_button = Button((WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 + 10, 200, 50), "Quit", big)
     mute_btn = Button((WINDOW_WIDTH - 110, 10, 100, 40), "Mute", small)
-    last_click_by_ai = False #tracks if human or AI clicked last
+    #last_click_by_ai = False #tracks if human or AI clicked last
 
     # Show menu loop
     in_menu = True
@@ -168,7 +168,7 @@ def main():
                 display_end_screen(screen, sprites, win=False, mode='ai')
                 revealed[:, :] = True
                 game_over = True
-                last_click_by_ai = True
+                #last_click_by_ai = True
                 status = "Game Over"
             else:
                 reveal(board, revealed, ai_x, ai_y)
@@ -223,16 +223,12 @@ def main():
                                         display_end_screen(screen, sprites, win=False, mode='normal')
                                     # Hit a mine -> game over
                                     else:
-                                        if last_click_by_ai == False: #checks if last click was ai
-                                            play_music(LOSE_MUSIC)
-                                            display_end_screen(screen, sprites, win=False, mode='human') #since its human and a bomb they lose
-                                        else:
-                                            play_music(WIN_MUSIC) 
-                                            display_end_screen(screen, sprites, win=True, mode='ai')
+                                        play_music(LOSE_MUSIC) 
+                                        display_end_screen(screen, sprites, win=False, mode='human')
                                     revealed[:, :] = True
                                     status = "Game Over"
                                     game_over = True
-                                    last_click_by_ai = False
+                                    #last_click_by_ai = False
                                 else:
                                     reveal(board, revealed, x, y)
                             turn += 1 # update turn number
@@ -246,18 +242,12 @@ def main():
                 play_music(WIN_MUSIC)
                 display_end_screen(screen, sprites, win=True, mode="normal")
                 status = "Victory"
-            elif (mode == AIMode.Solver): #or (mode == AIMode.Alternate and turn % 2 == 0) took out of zeidans condition 
-                    # Human cleared board in AI mode
-                    play_music(WIN_MUSIC)
-                    display_end_screen(screen, sprites, win=True, mode="ai")
-                    status = "Victory"
-            elif last_click_by_ai == True:
-                # AI cleared the board
-                play_music(LOSE_MUSIC)
-                display_end_screen(screen, sprites, win=False, mode="ai")
-                status = "Game Over"
+            elif (mode == AIMode.Solver or mode == AIMode.Alternate and turn % 2 == 0):
+                # AI just played and cleared board
+                play_music(WIN_MUSIC)
+                display_end_screen(screen, sprites, win=True, mode="ai")
             else:
-                # Huamn cleared in ai mode
+                # Human cleared board
                 play_music(WIN_MUSIC)
                 display_end_screen(screen, sprites, win=True, mode="human")
                 status = "Victory"
