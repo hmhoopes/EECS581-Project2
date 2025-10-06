@@ -58,6 +58,14 @@ def generate_board(size, num_mines):
     return board
 
 def play_music(music_file, volume = 0.1, mute = False):
+    '''
+    Manages playing the background music based on the status of the game and mutes if is_muted is true
+    Args:
+        music_file: the name of the music playing
+        volume: the volune level
+        mute: boolean to determine if the music is muted or not
+
+    '''
     if mute == False:
         loop = True
         mixer.music.pause()
